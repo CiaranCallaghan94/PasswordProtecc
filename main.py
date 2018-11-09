@@ -29,7 +29,7 @@ def set_password():
 	f.close
 
 def read_password():
-	
+
 	f = open("res/enc_pwd.txt", "r")
 	enc_pwd = f.read()
 	f.close
@@ -61,14 +61,14 @@ def add_service(services, service, password):
 
 	try:
 		if service in services.keys():
-			overwrite = False 
+			overwrite = False
 			ans = input('Service already exists, do you want to overwrite (yes/no)')
 			if ans.lower() == 'yes':
 				services[service] = password
 				print('Password changed succesfully')
 			else:
 				print('Password change unsuccesfull')
-		
+
 		else:
 			services[service] = password
 			print('Password changed succesfully')
@@ -83,8 +83,7 @@ def remove_service(services, service):
 		return('error removing service ' + service)
 
 def write_updated_services(updated_services):
-	print('updated file: ', end=' ')
-	print(updated_services)
+	print('updated file:')
 	with open('res/services.txt', 'w') as file:
 		file.write(json.dumps(updated_services))
 
@@ -95,42 +94,54 @@ def write_updated_services(updated_services):
 #
 
 if __name__ == "__main__":
-	
+
 	print("Working....")
 
 	while attempts < max_attempts and not logged_in:
 
 		if enter_password():
 			logged_in  = True
-			print('We are in!')
+			print('Login succesful')
 
 			while(logged_in):
-				
-				action = input('What do you want to do? (getservices/addservice/removeservice/getpassword/quit)')
+
+				action = input ('What do you want to do? (getservices/addservice/removeservice/getpassword/logout/quit)')
 				services = get_services()
 
 				if action == 'getservices':
 					services_list = get_services_list(services)
 					for key in services_list:
 						print(key)
-					
+
 				if action == 'addservice':
-					add_service(services, 'facebook', 'Hit me Mark!!!')
+					service = input('What Service would you like to save?')
+					password = input('What is your Password for this service?')
+					add_service(services, service, password)
 					write_updated_services(services)
 
 				if action == 'removeservice':
-					remove_service(services, 'gmail')
-					write_updated_services(services)
-					
+					service = input('What Service would you like to remove?')
+					confirmation = input(f'Are you sure you want to remove {service}? (yes/no)')
+					if confirmation == 'yes':
+						remove_service(services, service)
+						write_updated_services(services)
+						print(f'{service} was removed succesfully')
+					else:
+						print(f'{service} was not removed')
+
 				if action == 'getpassword':
 					print(get_password_for_service(services,'facebook'))
 
-				if action == 'quit':
+				if action == 'logout':
 					logged_in = False
 					print('Bye for now! :D')
 
+				if action == 'quit':
+					print('Bye! :(')
+					exit()
+
 		else:
-		
+
 			print('Incorrect Password')
 			attempts += 1
 

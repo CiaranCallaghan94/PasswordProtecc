@@ -1,7 +1,3 @@
-#import hashlib
-
-#sha = hashlib.sha1(b'Hi Niall!').hexdigest()
-
 import passlib
 import json
 
@@ -12,7 +8,7 @@ pwd_context = CryptContext(
         default="pbkdf2_sha256",
         pbkdf2_sha256__default_rounds=30000
 )
-# Password123!
+
 logged_in = False
 attempts = 0
 max_attempts = 3
@@ -62,7 +58,7 @@ def get_password_for_service(services, service):
 
 
 def add_service(services, service, password):
-	# Add additional Checks
+
 	try:
 		if service in services.keys():
 			overwrite = False 
@@ -138,33 +134,4 @@ if __name__ == "__main__":
 			print('Incorrect Password')
 			attempts += 1
 
-	if attempts==max_attempts: print('Fuck off you hacker!!!')
-#	while attempts < max_attempts and not succesful_login:
-
-#	if enter_password():
-#		succesful_login  = True
-#		print('We are in!')
-
-		
-#	else:
-		
-#		print('Incorrect Password')
-#		attempts += 1
-
-#	if not succesful_login: print('Fuck off you hacker!!!')
-
-
-
-
-
-
-
-
-
-
-
-
-
-#set_password()
-# IMPORTANT
-
+	if attempts==max_attempts: print('You are a hacker!!!')

@@ -1,5 +1,6 @@
 import passlib
 import json
+import getpass
 
 from passlib.context import CryptContext
 
@@ -36,7 +37,7 @@ def read_password():
 	return enc_pwd
 
 def enter_password():
-	pwd = input('Please enter your Password: \n')
+	pwd = getpass.getpass('Please enter your Password: ')
 	print("Checking pasword.....")
 	return verify_encrypted_password(pwd, read_password())
 
@@ -104,24 +105,25 @@ if __name__ == "__main__":
 			print('Login succesful')
 
 			while(logged_in):
-
 				action = input ('What do you want to do? (getservices/addservice/removeservice/getpassword/logout/quit)')
 				services = get_services()
 
 				if action == 'getservices':
+					print('Available services:')
 					services_list = get_services_list(services)
 					for key in services_list:
 						print(key)
 
 				if action == 'addservice':
 					service = input('What Service would you like to save?')
-					password = input('What is your Password for this service?')
+					password = getpass.getpass('Please enter the Password for this service: ')
 					add_service(services, service, password)
 					write_updated_services(services)
 
 				if action == 'removeservice':
 					service = input('What Service would you like to remove?')
 					confirmation = input(f'Are you sure you want to remove {service}? (yes/no)')
+
 					if confirmation == 'yes':
 						remove_service(services, service)
 						write_updated_services(services)
@@ -130,7 +132,13 @@ if __name__ == "__main__":
 						print(f'{service} was not removed')
 
 				if action == 'getpassword':
-					print(get_password_for_service(services,'facebook'))
+					print('Available services:')
+					services_list = get_services_list(services)
+					for key in services_list:
+						print(key)
+
+					service = input('What Service would you like to save?')
+					print(get_password_for_service(services,service))
 
 				if action == 'logout':
 					logged_in = False
